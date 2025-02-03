@@ -2,7 +2,7 @@ import os
 import stat
 from pathlib import Path
 
-PARTITION = "gpu-l40"
+PARTITION = "ckpt-g2"
 
 VARIANTS = [
     "baseline_cot",
