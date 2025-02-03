@@ -1,0 +1,74 @@
+import os
+import stat
+from pathlib import Path
+
+PARTITION = "gpu-l40"
+
+VARIANTS = [
+    "baseline_cot",
+    "democrat_cot",
+    "republican_cot",
+    "democrat_accuracy",
+    "republican_accuracy",
+]
+
+MODELS = [
+    "llama3.1",
+    "llama2",
+    "mistral",
+    "wizardlm2",
+]
+
+slurm_def = lambda variant, model: f"""#!/bin/bash
+
+#SBATCH --account=clmbr
+#SBATCH --job-name=run-ollama-{variant}-{model}
+#SBATCH --partition={PARTITION}
+#SBATCH --nodes=1
+#SBATCH --ntasks-per-node=1
+#SBATCH --gpus-per-node=1
+#SBATCH --mem=48G
+#SBATCH --time=10:00:00
+#SBATCH -o /mmfs1//gscratch/clmbr/amelie/projects/motivated-reasoning/%x_%j.out
+
+cd /gscratch/clmbr/amelie/projects/motivated-reasoning
+
+conda init bash
+source ~/.bashrc
+conda activate misinfo
+
+echo "Starting ollama"
+export no_proxy=127.0.0.1,localhost
+./start-ollama.sh
+
+echo "Sleeping for 10 seconds to let the ollama server start"
+sleep 10
+
+echo "Running scripts"
+python run-ollama.py {variant} {model}
+"""
+
+def chmodx(path):
+    st = os.stat(path)
+    os.chmod(path, st.st_mode | stat.S_IEXEC)
+
+def main():
+    os.makedirs("slurm", exist_ok=True)
+
+    with open("slurm/submit_all.sh", "w") as sh:
+        sh.write("#!/bin/bash\n")
+
+        for variant in VARIANTS:
+            for model in MODELS:
+                path = Path(f"slurm/{variant}-{model}.slurm")
+                
+                print(f"Writing {path}")
+                with open(path, "w") as f:
+                    f.write(slurm_def(variant, model))
+                
+                sh.write(f"sbatch {path.absolute()}\n")
+
+    chmodx("slurm/submit_all.sh")
+
+if __name__ == "__main__":
+    main()

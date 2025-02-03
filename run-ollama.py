@@ -74,17 +74,15 @@ def prepare_conf_message(message_pa, system_message):
     return message_pa + message_conf
 
 def query_model(model, messages):
+    return ollama.chat(model=model, messages = messages)
+
+def run_simulation(model, instructions, mist, n_sim):
     ollama.pull(model)
-
-    response = ollama.chat(model=model, messages = messages)    
-    return response
-
-def run_simulation(model, instructions, mist, n_sim = 100):
     
     llm_answers_pa = []
     llm_answers_conf = []
     pid = []
-    
+
     for n in range(n_sim):
         for i in range(mist.shape[0]):
             try:
@@ -103,23 +101,14 @@ def run_simulation(model, instructions, mist, n_sim = 100):
                 
     return llm_answers_pa, llm_answers_conf, pid
 
-def process_answers(llm_df):
-    mist_replicated = pd.concat([mist]*100, ignore_index = True)
-    llm_df = pd.concat([mist_replicated, llm_df], axis = 1).dropna()
-    # print(llm_df)
-    llm_df['perceived_accuracy'] = llm_df['perceived_accuracy'].apply(lambda x: int(match.group()) if (match := re.search(r'\b\d+\b', x)) else None)
-    llm_df['confidence'] = llm_df['confidence'].apply(lambda x: int(match.group()) if (match := re.search(r'\b\d+\b', x)) else None)
-    llm_df.dropna(subset = ['perceived_accuracy', 'confidence'], inplace = True)
-    llm_df[['perceived_accuracy', 'confidence']] = llm_df[['perceived_accuracy', 'confidence']].astype(int)
-
-    return llm_df
-
-
 def run_model(model_name, instructions, csv_name):
-    model_pa, model_conf, model_pid = run_simulation(model_name, instructions, mist)
+    n_sim = 100
+    model_pa, model_conf, model_pid = run_simulation(model_name, instructions, mist, n_sim)
+    mist_replicated = pd.concat([mist] * n_sim, ignore_index = True)
     model_df = pd.DataFrame(zip(model_pa, model_conf, model_pid), columns = ['perceived_accuracy', 'confidence', 'pid'])
-    model_df = process_answers(model_df)
+    model_df = pd.concat([mist_replicated, model_df], axis = 1)
     model_df.to_csv(csv_name)
+    return model_df
 
 if __name__ == "__main__":
     INSTRUCTIONS_BASELINE_COT = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
@@ -144,7 +133,8 @@ if __name__ == "__main__":
     }
 
     variant = sys.argv[1]
-    print(f"RUNNING WITH VARIANT: {variant}")
+    model = sys.argv[2]
+    print(f"RUNNING WITH VARIANT: {variant}, MODEL: {model}")
 
     if variant not in variant_to_instructions:
         raise Exception(f"Variant '{variant}' not known")
@@ -152,8 +142,5 @@ if __name__ == "__main__":
     instructions = variant_to_instructions[variant]
 
     os.makedirs("data", exist_ok=True)
-     
-    run_model('llama3.1',  instructions, f"data/llama3.1_{variant}_MIST.csv")
-    run_model('llama2',    instructions, f"data/llama2_{variant}_MIST.csv")
-    run_model('mistral',   instructions, f"data/mistral_{variant}_MIST.csv")
-    run_model('wizardlm2', instructions, f"data/wizardlm2_{variant}_MIST.csv")
+
+    run_model(model, instructions, f"data/{model}_{variant}_MIST.csv")
