@@ -8,8 +8,9 @@
 #SBATCH --gpus-per-node=1
 #SBATCH --mem=48G
 #SBATCH --time=20:00:00
+#SBATCH -o /mmfs1//gscratch/clmbr/amelie/projects/motivated-reasoning/run_%x_%j.out
 
-#SBATCH -o /mmfs1/gscratch/clmbr/amelie/projects/misinfo_ollama/run_%x_%j.out
+cd /gscratch/clmbr/amelie/projects/motivated-reasoning
 
 conda init bash
 source ~/.bashrc

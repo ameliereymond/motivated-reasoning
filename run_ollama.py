@@ -2,6 +2,8 @@ import pandas as pd
 import numpy as np
 import ollama
 import re
+import os
+import sys
 
 real_or_fake = [
     "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake",
@@ -120,8 +122,6 @@ def run_model(model_name, instructions, csv_name):
     model_df.to_csv(csv_name)
 
 if __name__ == "__main__":
-    import sys
-
     INSTRUCTIONS_BASELINE_COT = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
 
     INSTRUCTIONS_PERSONA_COT_TEMPLATE = "Take the role of a {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
@@ -150,8 +150,10 @@ if __name__ == "__main__":
         raise Exception(f"Variant '{variant}' not known")
 
     instructions = variant_to_instructions[variant]
-    
-    run_model('llama3.1',  instructions, f"llama3.1_{variant}_MIST.csv")
-    run_model('llama2',    instructions, f"llama2_{variant}_MIST.csv")
-    run_model('mistral',   instructions, f"mistral_{variant}_MIST.csv")
-    run_model('wizardlm2', instructions, f"wizardlm2_{variant}_MIST.csv")
+
+    os.makedirs("data", exist_ok=True)
+     
+    run_model('llama3.1',  instructions, f"data/llama3.1_{variant}_MIST.csv")
+    run_model('llama2',    instructions, f"data/llama2_{variant}_MIST.csv")
+    run_model('mistral',   instructions, f"data/mistral_{variant}_MIST.csv")
+    run_model('wizardlm2', instructions, f"data/wizardlm2_{variant}_MIST.csv")
