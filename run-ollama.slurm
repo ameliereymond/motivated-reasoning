@@ -16,6 +16,7 @@ conda init bash
 source ~/.bashrc
 conda activate misinfo
 
+export no_proxy=127.0.0.1,localhost
 ./start-ollama.sh
 
 python run_ollama.py baseline_cot
