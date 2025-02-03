@@ -39,7 +39,8 @@ conda activate misinfo
 
 echo "Starting ollama"
 export no_proxy=127.0.0.1,localhost
-./start-ollama.sh
+export OLLAMA_MODELS=/gscratch/clmbr/amelie/.cache/ollama/models
+nohup ollama serve > ollama-{variant}-{model}.log 2>&1 &
 
 echo "Sleeping for 10 seconds to let the ollama server start"
 sleep 10
