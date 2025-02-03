@@ -72,11 +72,9 @@ def prepare_conf_message(message_pa, system_message):
     ]
     return message_pa + message_conf
 
-def query_model(model, messages):
-    return ollama.chat(model=model, messages=messages, host=OLLAMA_HOST)
-
 def run_simulation(model, instructions, mist, n_sim):
-    ollama.pull(model)
+    client = ollama.Client(host=OLLAMA_HOST)
+    client.pull(model)
     
     llm_answers_pa = []
     llm_answers_conf = []
@@ -86,9 +84,9 @@ def run_simulation(model, instructions, mist, n_sim):
         for i in range(mist.shape[0]):
             try:
                 pa_message = prepare_pa_message(mist['headlines'].iloc[i], instructions)
-                assistant_message_pa = query_model(model, pa_message)['message']['content']
+                assistant_message_pa = client.chat(model=model, messages=pa_message)['message']['content']
                 conf_message = prepare_conf_message(pa_message, assistant_message_pa)
-                assistant_message_conf = query_model(model, conf_message)['message']['content']
+                assistant_message_conf = client.chat(model=model, messages=conf_message)['message']['content']
                 llm_answers_pa.append(assistant_message_pa)
                 llm_answers_conf.append(assistant_message_conf)
                 pid.append(n)
