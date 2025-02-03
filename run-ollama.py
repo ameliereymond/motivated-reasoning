@@ -5,6 +5,8 @@ import re
 import os
 import sys
 
+OLLAMA_HOST = "http://127.0.0.1:11434"
+
 real_or_fake = [
     "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake",
     "Real", "Real", "Real", "Real", "Real", "Real", "Real", "Real", "Real", "Real"
@@ -39,9 +41,6 @@ mist = pd.DataFrame({
     "headlines": headlines
 })
 
-
-
-
 def prepare_pa_message(headline, instructions):
     message_pa = [
         {
@@ -74,7 +73,7 @@ def prepare_conf_message(message_pa, system_message):
     return message_pa + message_conf
 
 def query_model(model, messages):
-    return ollama.chat(model=model, messages = messages)
+    return ollama.chat(model=model, messages=messages, host=OLLAMA_HOST)
 
 def run_simulation(model, instructions, mist, n_sim):
     ollama.pull(model)
@@ -134,7 +133,11 @@ if __name__ == "__main__":
 
     variant = sys.argv[1]
     model = sys.argv[2]
-    print(f"RUNNING WITH VARIANT: {variant}, MODEL: {model}")
+
+    if len(sys.argv) == 4:
+        OLLAMA_HOST = sys.argv[3]
+    
+    print(f"RUNNING WITH VARIANT: {variant}, MODEL: {model}, OLLAMA HOST: {OLLAMA_HOST}")
 
     if variant not in variant_to_instructions:
         raise Exception(f"Variant '{variant}' not known")

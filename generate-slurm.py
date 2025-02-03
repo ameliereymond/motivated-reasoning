@@ -19,7 +19,7 @@ MODELS = [
     "wizardlm2",
 ]
 
-slurm_def = lambda variant, model: f"""#!/bin/bash
+slurm_def = lambda variant, model, port: f"""#!/bin/bash
 
 #SBATCH --account=clmbr
 #SBATCH --job-name=run-ollama-{variant}-{model}
@@ -37,16 +37,16 @@ conda init bash
 source ~/.bashrc
 conda activate misinfo
 
-echo "Starting ollama"
+echo "Starting ollama on port {port}"
 export no_proxy=127.0.0.1,localhost
 export OLLAMA_MODELS=/gscratch/clmbr/amelie/.cache/ollama/models
-nohup ollama serve > ollama-{variant}-{model}.log 2>&1 &
+OLLAMA_HOST=127.0.0.1:{port} ollama serve > ollama-{variant}-{model}.log 2>&1 &
 
 echo "Sleeping for 10 seconds to let the ollama server start"
 sleep 10
 
 echo "Running scripts"
-python run-ollama.py {variant} {model}
+python run-ollama.py {variant} {model} http://127.0.0.1:{port}
 """
 
 def chmodx(path):
@@ -59,15 +59,19 @@ def main():
     with open("slurm/submit_all.sh", "w") as sh:
         sh.write("#!/bin/bash\n")
 
+        port = 11434
+
         for variant in VARIANTS:
             for model in MODELS:
                 path = Path(f"slurm/{variant}-{model}.slurm")
                 
                 print(f"Writing {path}")
                 with open(path, "w") as f:
-                    f.write(slurm_def(variant, model))
+                    contents = slurm_def(variant, model, port)
+                    f.write(contents)
                 
                 sh.write(f"sbatch {path.absolute()}\n")
+                port += 1
 
     chmodx("slurm/submit_all.sh")
 
