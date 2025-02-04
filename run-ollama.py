@@ -108,25 +108,78 @@ def run_model(model_name, instructions, csv_name):
     return model_df
 
 if __name__ == "__main__":
+
+    # COT instructions 
     INSTRUCTIONS_BASELINE_COT = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
-
     INSTRUCTIONS_PERSONA_COT_TEMPLATE = "Take the role of a {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
+    INSTRUCTIONS_PERSONA_EDUCATION_COT_TEMPLATE = "Take the role of a person whose highest level of education is {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
+    INSTRUCTIONS_PERSONA_GENDER_COT_TEMPLATE = "You are a {}. Your responses should closely mirror the knowledge and abilities of this persona. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
 
+
+    # political 
     INSTRUCTIONS_PERSONA_DEMOCRAT_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("Democrat")
     INSTRUCTIONS_PERSONA_REPUBLICAN_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("Republican")
 
-    INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE = "Take the role of a {} who has skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    # religious
+    INSTRUCTIONS_PERSONA_RELIGIOUS_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("a religious person")
+    INSTRUCTIONS_PERSONA_ATHEIST_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("an atheist")
 
+    # education
+    INSTRUCTIONS_PERSONA_HIGH_SCHOOL_COT = INSTRUCTIONS_PERSONA_EDUCATION_COT_TEMPLATE.format("high school diploma or GED")
+    INSTRUCTIONS_PERSONA_COLLEGE_COT = INSTRUCTIONS_PERSONA_EDUCATION_COT_TEMPLATE.format("Bachelor's or above")
+
+    # gender
+    INSTRUCTIONS_PERSONA_WOMAN_COT_TEMPLATE = INSTRUCTIONS_PERSONA_GENDER_COT_TEMPLATE.format("man")
+    INSTRUCTIONS_PERSONA_MAN_COT_TEMPLATE = INSTRUCTIONS_PERSONA_GENDER_COT_TEMPLATE.format("woman")
+
+
+    # Accuracy instructions 
+    INSTRUCTIONS_BASELINE_ACCURACY = "You are a person who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE = "Take the role of a {} who has skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_EDUCATION_ACCURACY_TEMPLATE = "Take the role of a person whose highest level of education is {} and has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_GENDER_ACCURACY_TEMPLATE = "You are a {} who has a skeptical attitude and strives for accuracy. Your responses should closely mirror the knowledge and abilities of this persona. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
+
+    # political 
     INSTRUCTIONS_PERSONA_DEMOCRAT_ACCURACY = INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE.format("Democrat")
     INSTRUCTIONS_PERSONA_REPUBLICAN_ACCURACY = INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE.format("Republican")
 
+    # religious
+    INSTRUCTIONS_PERSONA_RELIGIOUS_ACCURACY = INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE.format("a religious person")
+    INSTRUCTIONS_PERSONA_ATHEIST_ACCURACY = INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE.format("an atheist")
+
+    # education 
+    INSTRUCTIONS_PERSONA_HIGH_SCHOOL_ACCURACY = INSTRUCTIONS_PERSONA_EDUCATION_ACCURACY_TEMPLATE.format("high school diploma or GED")
+    INSTRUCTIONS_PERSONA_COLLEGE_ACCURACY = INSTRUCTIONS_PERSONA_EDUCATION_ACCURACY_TEMPLATE.format("Bachelor's or above")
+
+    # gender
+    INSTRUCTIONS_PERSONA_WOMAN_ACCURACY = INSTRUCTIONS_PERSONA_GENDER_ACCURACY_TEMPLATE.format("man")
+    INSTRUCTIONS_PERSONA_MAN_ACCURACY = INSTRUCTIONS_PERSONA_GENDER_ACCURACY_TEMPLATE.format("woman")
+
 
     variant_to_instructions = {
+        # Chain of thought 
         "baseline_cot": INSTRUCTIONS_BASELINE_COT,
         "democrat_cot": INSTRUCTIONS_PERSONA_DEMOCRAT_COT,
         "republican_cot": INSTRUCTIONS_PERSONA_REPUBLICAN_COT, 
+        "religious_cot": INSTRUCTIONS_PERSONA_RELIGIOUS_COT, 
+        "atheist_cot": INSTRUCTIONS_PERSONA_ATHEIST_COT, 
+        "high_school_cot": INSTRUCTIONS_PERSONA_HIGH_SCHOOL_COT,
+        "college_cot": INSTRUCTIONS_PERSONA_COLLEGE_COT,
+        "woman_cot": INSTRUCTIONS_PERSONA_WOMAN_COT_TEMPLATE,
+        "man_cot": INSTRUCTIONS_PERSONA_MAN_COT_TEMPLATE, 
+
+        # Accuracy 
+        "baseline_accuracy": INSTRUCTIONS_BASELINE_ACCURACY,
         "democrat_accuracy": INSTRUCTIONS_PERSONA_DEMOCRAT_ACCURACY, 
-        "republican_accuracy": INSTRUCTIONS_PERSONA_REPUBLICAN_ACCURACY
+        "republican_accuracy": INSTRUCTIONS_PERSONA_REPUBLICAN_ACCURACY, 
+        "religious_accuracy": INSTRUCTIONS_PERSONA_RELIGIOUS_ACCURACY,
+        "atheist_accuracy": INSTRUCTIONS_PERSONA_ATHEIST_ACCURACY,
+        "high_school_accuracy": INSTRUCTIONS_PERSONA_HIGH_SCHOOL_ACCURACY,
+        "college_accuracy": INSTRUCTIONS_PERSONA_COLLEGE_ACCURACY,
+        "woman_accuracy": INSTRUCTIONS_PERSONA_WOMAN_ACCURACY, 
+        "man_accuracy": INSTRUCTIONS_PERSONA_MAN_ACCURACY
+
+
     }
 
     variant = sys.argv[1]
