@@ -8,8 +8,22 @@ VARIANTS = [
     "baseline_cot",
     "democrat_cot",
     "republican_cot",
+    "religious_cot",
+    "atheist_cot",
+    "high_school_cot",
+    "college_cot", 
+    "woman_cot",
+    "man_cot",
+    "baseline_accuracy",
     "democrat_accuracy",
     "republican_accuracy",
+    "religious_accuracy",
+    "atheist_accuracy",
+    "high_school_accuracy",
+    "college_accuracy",
+    "woman_accuracy",
+    "man_accuracy"
+
 ]
 
 MODELS = [
