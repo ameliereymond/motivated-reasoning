@@ -71,7 +71,6 @@ python run-ollama.py {variant} {self.name} {self.evaluator} http://127.0.0.1:{po
 # Maps model name to where it should be evaluated
 MODELS = [
     Model(name="llama3.1",  evaluator="ollama", needs_gpu=True),
-    Model(name="llama3.1",  evaluator="ollama", needs_gpu=True),
     Model(name="llama2",    evaluator="ollama", needs_gpu=True),
     Model(name="mistral",   evaluator="ollama", needs_gpu=True),
     Model(name="wizardlm2", evaluator="ollama", needs_gpu=True),
