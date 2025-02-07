@@ -23,29 +23,28 @@ VARIANTS = [
     "college_accuracy",
     "woman_accuracy",
     "man_accuracy"
-
 ]
 
-# Maps model name to where it should be evaluated
-MODELS = {
-    "llama3.1": "ollama",
-    "llama2": "ollama",
-    "mistral": "ollama",
-    "wizardlm2": "ollama",
-    "gpt-3.5-turbo-0125": "openai",
-    "gpt-4-0613": "openai",
-    "gpt-4o": "openai",
-    "gpt-4o-mini": "openai"
-}
+class Model:
+    def __init__(self, name: str, evaluator: str, needs_gpu: bool):
+        self.name = name
+        self.evaluator = evaluator
+        self.needs_gpu = needs_gpu
 
-slurm_def = lambda variant, model, evaluator, port: f"""#!/bin/bash
+    def generate_slurm(self, variant, port):
+        if self.needs_gpu:
+            gpu_header = "#SBATCH --gpus-per-node=1"
+        else:
+            gpu_header = ""
+
+        return f"""#!/bin/bash
 
 #SBATCH --account=clmbr
-#SBATCH --job-name=run-ollama-{variant}-{model}
+#SBATCH --job-name=run-ollama-{variant}-{self.name}
 #SBATCH --partition={PARTITION}
 #SBATCH --nodes=1
 #SBATCH --ntasks-per-node=1
-#SBATCH --gpus-per-node=1
+{gpu_header}
 #SBATCH --mem=48G
 #SBATCH --time=10:00:00
 #SBATCH -o /mmfs1//gscratch/clmbr/amelie/projects/motivated-reasoning/%x_%j.out
@@ -59,14 +58,28 @@ conda activate misinfo
 echo "Starting ollama on port {port}"
 export no_proxy=127.0.0.1,localhost
 export OLLAMA_MODELS=/gscratch/clmbr/amelie/.cache/ollama/models
-OLLAMA_HOST=127.0.0.1:{port} ollama serve > ollama-{variant}-{model}.log 2>&1 &
+OLLAMA_HOST=127.0.0.1:{port} ollama serve > ollama-{variant}-{self.name}.log 2>&1 &
 
 echo "Sleeping for 10 seconds to let the ollama server start"
 sleep 10
 
 echo "Running scripts"
-python run-ollama.py {variant} {model} {evaluator} http://127.0.0.1:{port}
+python run-ollama.py {variant} {self.name} {self.evaluator} http://127.0.0.1:{port}
 """
+
+
+# Maps model name to where it should be evaluated
+MODELS = [
+    Model(name="llama3.1",  evaluator="ollama", needs_gpu=True),
+    Model(name="llama3.1",  evaluator="ollama", needs_gpu=True),
+    Model(name="llama2",    evaluator="ollama", needs_gpu=True),
+    Model(name="mistral",   evaluator="ollama", needs_gpu=True),
+    Model(name="wizardlm2", evaluator="ollama", needs_gpu=True),
+    Model(name="gpt-3.5-turbo-0125", evaluator="openai", needs_gpu=False),
+    Model(name="gpt-4-0613",  evaluator="openai", needs_gpu=False),
+    Model(name="gpt-4o",      evaluator="openai", needs_gpu=False),
+    Model(name="gpt-4o-mini", evaluator="openai", needs_gpu=False)
+]
 
 def chmodx(path):
     st = os.stat(path)
@@ -81,12 +94,12 @@ def main():
         port = 11434
 
         for variant in VARIANTS:
-            for (model, evaluator) in MODELS.items():
-                path = Path(f"slurm/{variant}-{model}.slurm")
+            for model in MODELS:
+                path = Path(f"slurm/{variant}-{model.name}.slurm")
                 
                 print(f"Writing {path}")
                 with open(path, "w") as f:
-                    contents = slurm_def(variant, model, evaluator, port)
+                    contents = model.generate_slurm(variant, port)
                     f.write(contents)
                 
                 sh.write(f"sbatch {path.absolute()}\n")
