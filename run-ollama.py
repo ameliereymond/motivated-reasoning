@@ -4,8 +4,9 @@ import ollama
 import re
 import os
 import sys
-
-OLLAMA_HOST = "http://127.0.0.1:11434"
+import openai 
+from openai import OpenAI
+from dotenv import load_dotenv
 
 real_or_fake = [
     "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake",
@@ -73,8 +74,7 @@ def prepare_conf_message(message_pa, system_message):
     return message_pa + message_conf
 
 def run_simulation(model, instructions, mist, n_sim):
-    client = ollama.Client(host=OLLAMA_HOST)
-    client.pull(model)
+    model.pull()
     
     llm_answers_pa = []
     llm_answers_conf = []
@@ -84,9 +84,11 @@ def run_simulation(model, instructions, mist, n_sim):
         for i in range(mist.shape[0]):
             try:
                 pa_message = prepare_pa_message(mist['headlines'].iloc[i], instructions)
-                assistant_message_pa = client.chat(model=model, messages=pa_message)['message']['content']
+                assistant_message_pa = model.query(pa_message)
+                
                 conf_message = prepare_conf_message(pa_message, assistant_message_pa)
-                assistant_message_conf = client.chat(model=model, messages=conf_message)['message']['content']
+                assistant_message_conf = model.query(conf_message)
+                
                 llm_answers_pa.append(assistant_message_pa)
                 llm_answers_conf.append(assistant_message_conf)
                 pid.append(n)
@@ -98,14 +100,47 @@ def run_simulation(model, instructions, mist, n_sim):
                 
     return llm_answers_pa, llm_answers_conf, pid
 
-def run_model(model_name, instructions, csv_name):
+def run_model(model, instructions, csv_name):
     n_sim = 100
-    model_pa, model_conf, model_pid = run_simulation(model_name, instructions, mist, n_sim)
+    model_pa, model_conf, model_pid = run_simulation(model, instructions, mist, n_sim)
     mist_replicated = pd.concat([mist] * n_sim, ignore_index = True)
     model_df = pd.DataFrame(zip(model_pa, model_conf, model_pid), columns = ['perceived_accuracy', 'confidence', 'pid'])
     model_df = pd.concat([mist_replicated, model_df], axis = 1)
     model_df.to_csv(csv_name)
     return model_df
+
+class OpenAIModel:
+    def __init__(self, model_name: str, api_key: str):
+        self.model_name = model_name
+        self.client = OpenAI(api_key = api_key)
+
+    def pull(self):
+        # Nothing to pull, we're calling a remote REST API
+        pass
+
+    def query(self, messages):
+        response = self.client.chat.completions.create(
+            model=self.model_name,
+            messages = messages, 
+            temperature=0.7,
+            max_tokens=2048,
+            top_p=1,
+            frequency_penalty=0,
+            presence_penalty=0,
+            logprobs = True)
+        
+        return response.choices[0].message.content
+
+class OllamaModel:
+    def __init__(self, model_name: str, host: str):
+        self.client = ollama.Client(host=host)
+        self.model_name = model_name
+
+    def pull(self):
+        self.client.pull(self.model_name)
+    
+    def query(self, messages):
+        return self.client.chat(model=self.model_name, messages=messages).message.content
 
 if __name__ == "__main__":
 
@@ -178,23 +213,39 @@ if __name__ == "__main__":
         "college_accuracy": INSTRUCTIONS_PERSONA_COLLEGE_ACCURACY,
         "woman_accuracy": INSTRUCTIONS_PERSONA_WOMAN_ACCURACY, 
         "man_accuracy": INSTRUCTIONS_PERSONA_MAN_ACCURACY
-
-
     }
 
+    evaluator_to_constructor = {
+        "ollama": lambda model_name, host: OllamaModel(model_name, host),
+        "openai": lambda model_name, _: OpenAIModel(model_name)
+    }
+
+    # Get argv
     variant = sys.argv[1]
-    model = sys.argv[2]
+    model_name = sys.argv[2]
+    evaluator = sys.argv[3]
+    if len(sys.argv) == 5:
+        host = sys.argv[4]
+    else:
+        host = "http://127.0.0.1:11434"
 
-    if len(sys.argv) == 4:
-        OLLAMA_HOST = sys.argv[3]
-    
-    print(f"RUNNING WITH VARIANT: {variant}, MODEL: {model}, OLLAMA HOST: {OLLAMA_HOST}")
-
+    # Parse argv
     if variant not in variant_to_instructions:
         raise Exception(f"Variant '{variant}' not known")
-
     instructions = variant_to_instructions[variant]
+
+    if evaluator == "ollama":
+        model = OllamaModel(model_name, host)
+    elif evaluator == "openai":
+        load_dotenv()
+        api_key = os.environ["OPENAI_KEY"]
+        model = OpenAIModel(model_name, api_key)
+    else:    
+        raise Exception(f"Evaluator '{evaluator}' not known")
+
+    # Run!    
+    print(f"RUNNING WITH VARIANT: {variant}, MODEL: {model_name}, EVALUATOR: {evaluator}, OLLAMA HOST: {host}")
 
     os.makedirs("data", exist_ok=True)
 
-    run_model(model, instructions, f"data/{model}_{variant}_MIST.csv")
+    run_model(model, instructions, f"data/{model_name}_{variant}_MIST.csv")

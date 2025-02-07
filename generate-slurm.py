@@ -26,14 +26,19 @@ VARIANTS = [
 
 ]
 
-MODELS = [
-    "llama3.1",
-    "llama2",
-    "mistral",
-    "wizardlm2",
-]
+# Maps model name to where it should be evaluated
+MODELS = {
+    "llama3.1": "ollama",
+    "llama2": "ollama",
+    "mistral": "ollama",
+    "wizardlm2": "ollama",
+    "gpt-3.5-turbo-0125": "openai",
+    "gpt-4-0613": "openai",
+    "gpt-4o": "openai",
+    "gpt-4o-mini": "openai"
+}
 
-slurm_def = lambda variant, model, port: f"""#!/bin/bash
+slurm_def = lambda variant, model, evaluator, port: f"""#!/bin/bash
 
 #SBATCH --account=clmbr
 #SBATCH --job-name=run-ollama-{variant}-{model}
@@ -60,7 +65,7 @@ echo "Sleeping for 10 seconds to let the ollama server start"
 sleep 10
 
 echo "Running scripts"
-python run-ollama.py {variant} {model} http://127.0.0.1:{port}
+python run-ollama.py {variant} {model} {evaluator} http://127.0.0.1:{port}
 """
 
 def chmodx(path):
@@ -76,12 +81,12 @@ def main():
         port = 11434
 
         for variant in VARIANTS:
-            for model in MODELS:
+            for (model, evaluator) in MODELS.items():
                 path = Path(f"slurm/{variant}-{model}.slurm")
                 
                 print(f"Writing {path}")
                 with open(path, "w") as f:
-                    contents = slurm_def(variant, model, port)
+                    contents = slurm_def(variant, model, evaluator, port)
                     f.write(contents)
                 
                 sh.write(f"sbatch {path.absolute()}\n")
