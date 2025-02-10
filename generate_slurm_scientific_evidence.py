@@ -62,7 +62,7 @@ MODELS = [
     Model(name="llama3.1",  evaluator="ollama", needs_gpu=True),
     Model(name="llama2",    evaluator="ollama", needs_gpu=True),
     Model(name="mistral",   evaluator="ollama", needs_gpu=True),
-    #Model(name="wizardlm2", evaluator="ollama", needs_gpu=True),
+    Model(name="wizardlm2", evaluator="ollama", needs_gpu=True),
     #Model(name="gpt-3.5-turbo-0125", evaluator="openai", needs_gpu=False),
     #Model(name="gpt-4-0613",  evaluator="openai", needs_gpu=False),
     #Model(name="gpt-4o",      evaluator="openai", needs_gpu=False),
