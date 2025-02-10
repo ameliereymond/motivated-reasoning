@@ -55,18 +55,18 @@ echo "Sleeping for 10 seconds to let the ollama server start"
 sleep 10''' if self.evaluator == "ollama" else ""}
 
 echo "Running evidence evaluation"
-python evidence_evaluation.py {variant} {self.name} {self.evaluator} {f'http://127.0.0.1:{port}' if self.evaluator == "ollama" else ""}
+python scientific_evidence.py {variant} {self.name} {self.evaluator} {f'http://127.0.0.1:{port}' if self.evaluator == "ollama" else ""}
 """
 
 MODELS = [
     Model(name="llama3.1",  evaluator="ollama", needs_gpu=True),
     Model(name="llama2",    evaluator="ollama", needs_gpu=True),
     Model(name="mistral",   evaluator="ollama", needs_gpu=True),
-    Model(name="wizardlm2", evaluator="ollama", needs_gpu=True),
-    Model(name="gpt-3.5-turbo-0125", evaluator="openai", needs_gpu=False),
-    Model(name="gpt-4-0613",  evaluator="openai", needs_gpu=False),
-    Model(name="gpt-4o",      evaluator="openai", needs_gpu=False),
-    Model(name="gpt-4o-mini", evaluator="openai", needs_gpu=False)
+    #Model(name="wizardlm2", evaluator="ollama", needs_gpu=True),
+    #Model(name="gpt-3.5-turbo-0125", evaluator="openai", needs_gpu=False),
+    #Model(name="gpt-4-0613",  evaluator="openai", needs_gpu=False),
+    #Model(name="gpt-4o",      evaluator="openai", needs_gpu=False),
+    #Model(name="gpt-4o-mini", evaluator="openai", needs_gpu=False)
 ]
 
 def chmodx(path):
