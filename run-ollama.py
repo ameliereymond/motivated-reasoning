@@ -73,36 +73,57 @@ def prepare_conf_message(message_pa, system_message):
     ]
     return message_pa + message_conf
 
-def run_simulation(model, instructions, mist, n_sim):
+def run_simulation(model, instructions, mist, n_sim, already_computed = None):
     model.pull()
     
     llm_answers_pa = []
     llm_answers_conf = []
     pid = []
 
+    index = 0
+
     for n in range(n_sim):
         for i in range(mist.shape[0]):
             try:
-                pa_message = prepare_pa_message(mist['headlines'].iloc[i], instructions)
-                assistant_message_pa = model.query(pa_message)
-                
-                conf_message = prepare_conf_message(pa_message, assistant_message_pa)
-                assistant_message_conf = model.query(conf_message)
-                
-                llm_answers_pa.append(assistant_message_pa)
-                llm_answers_conf.append(assistant_message_conf)
-                pid.append(n)
+                if already_computed is not None and not np.isnan(already_computed.iloc[index]["perceived_accuracy"]):
+                    # If we already have computed, use the previously computed answer
+                    print(f"DEBUG: Using previously computed answer for index {index}")
+                    previous_result = already_computed.iloc[index]
+                    llm_answers_pa.append(previous_result["perceived_accuracy"])
+                    llm_answers_conf.append(previous_result["confidence"])
+                    pid.append(previous_result["pid"])
+
+                else:
+                    # If we have not yet computed, then actually query model
+                    print(f"DEBUG: Querying model for index {index}")
+                    pa_message = prepare_pa_message(mist['headlines'].iloc[i], instructions)
+                    assistant_message_pa = model.query(pa_message)
+
+                    conf_message = prepare_conf_message(pa_message, assistant_message_pa)
+                    assistant_message_conf = model.query(conf_message)
+                    
+                    llm_answers_pa.append(assistant_message_pa)
+                    llm_answers_conf.append(assistant_message_conf)
+                    pid.append(n)
 
             except Exception as e:
                 print(e)
+            
+            index += 1 
                 
-        print("{}/{}".format(n,n_sim), end = '\r', flush = True)
+        print("{}/{}".format(n,n_sim), end = '\n', flush = True)
                 
     return llm_answers_pa, llm_answers_conf, pid
 
 def run_model(model, instructions, csv_name):
     n_sim = 100
-    model_pa, model_conf, model_pid = run_simulation(model, instructions, mist, n_sim)
+
+    already_computed = None
+    if os.path.exists(csv_name):
+        print(f"WARNING: The CSV {csv_name} already exists. Will only compute the delta.")
+        already_computed = pd.read_csv(csv_name)
+
+    model_pa, model_conf, model_pid = run_simulation(model, instructions, mist, n_sim, already_computed)
     mist_replicated = pd.concat([mist] * n_sim, ignore_index = True)
     model_df = pd.DataFrame(zip(model_pa, model_conf, model_pid), columns = ['perceived_accuracy', 'confidence', 'pid'])
     model_df = pd.concat([mist_replicated, model_df], axis = 1)
