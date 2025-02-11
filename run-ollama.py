@@ -85,7 +85,7 @@ def run_simulation(model, instructions, mist, n_sim, already_computed = None):
     for n in range(n_sim):
         for i in range(mist.shape[0]):
             try:
-                if already_computed is not None and not np.isnan(already_computed.iloc[index]["perceived_accuracy"]):
+                if already_computed is not None and not pd.isnan(already_computed.iloc[index]["perceived_accuracy"]):
                     # If we already have computed, use the previously computed answer
                     print(f"DEBUG: Using previously computed answer for index {index}")
                     previous_result = already_computed.iloc[index]
