@@ -278,61 +278,57 @@ if __name__ == "__main__":
 
 
     variant_to_instructions = {
-    # baseline (no mitigation) variants 
-    "religious": INSTRUCTIONS_PERSONA_RELIGIOUS,
-    "atheist": INSTRUCTIONS_PERSONA_ATHEIST, 
-    "high_school": INSTRUCTIONS_PERSONA_HIGH_SCHOOL,
-    "college": INSTRUCTIONS_PERSONA_COLLEGE,
-    "woman": INSTRUCTIONS_PERSONA_WOMAN,
-    "man": INSTRUCTIONS_PERSONA_MAN, 
-    
-    "religious2": INSTRUCTIONS_PERSONA_RELIGIOUS2,
-    "atheist2": INSTRUCTIONS_PERSONA_ATHEIST2, 
-    "high_school2": INSTRUCTIONS_PERSONA_HIGH_SCHOOL2,
-    "college2": INSTRUCTIONS_PERSONA_COLLEGE2,
-    "woman2": INSTRUCTIONS_PERSONA_WOMAN2,
-    "man2": INSTRUCTIONS_PERSONA_MAN2,
+        # baseline (no mitigation) variants 
+        "religious": INSTRUCTIONS_PERSONA_RELIGIOUS,
+        "atheist": INSTRUCTIONS_PERSONA_ATHEIST, 
+        "high_school": INSTRUCTIONS_PERSONA_HIGH_SCHOOL,
+        "college": INSTRUCTIONS_PERSONA_COLLEGE,
+        "woman": INSTRUCTIONS_PERSONA_WOMAN,
+        "man": INSTRUCTIONS_PERSONA_MAN, 
+        
+        "religious2": INSTRUCTIONS_PERSONA_RELIGIOUS2,
+        "atheist2": INSTRUCTIONS_PERSONA_ATHEIST2, 
+        "high_school2": INSTRUCTIONS_PERSONA_HIGH_SCHOOL2,
+        "college2": INSTRUCTIONS_PERSONA_COLLEGE2,
+        "woman2": INSTRUCTIONS_PERSONA_WOMAN2,
+        "man2": INSTRUCTIONS_PERSONA_MAN2,
 
-    "religious3": INSTRUCTIONS_PERSONA_RELIGIOUS3,
-    "atheist3": INSTRUCTIONS_PERSONA_ATHEIST3, 
-    "high_school3": INSTRUCTIONS_PERSONA_HIGH_SCHOOL3,
-    "college3": INSTRUCTIONS_PERSONA_COLLEGE3,
-    "woman3": INSTRUCTIONS_PERSONA_WOMAN3,
-    "man3": INSTRUCTIONS_PERSONA_MAN3,
+        "religious3": INSTRUCTIONS_PERSONA_RELIGIOUS3,
+        "atheist3": INSTRUCTIONS_PERSONA_ATHEIST3, 
+        "high_school3": INSTRUCTIONS_PERSONA_HIGH_SCHOOL3,
+        "college3": INSTRUCTIONS_PERSONA_COLLEGE3,
+        "woman3": INSTRUCTIONS_PERSONA_WOMAN3,
+        "man3": INSTRUCTIONS_PERSONA_MAN3,
 
 
-    
-    # COT variants
-    "baseline_cot": "You will be given evidence to analyze. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step.",
-    "democrat_cot": "Take the role of a Democrat. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step.",
-    "republican_cot": "Take the role of a Republican. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step.",
-    "religious_cot": INSTRUCTIONS_PERSONA_RELIGIOUS_COT, 
-    "atheist_cot": INSTRUCTIONS_PERSONA_ATHEIST_COT, 
-    "high_school_cot": INSTRUCTIONS_PERSONA_HIGH_SCHOOL_COT,
-    "college_cot": INSTRUCTIONS_PERSONA_COLLEGE_COT,
-    "woman_cot": INSTRUCTIONS_PERSONA_WOMAN_COT_TEMPLATE,
-    "man_cot": INSTRUCTIONS_PERSONA_MAN_COT_TEMPLATE, 
+        
+        # COT variants
+        "baseline_cot": "You will be given evidence to analyze. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step.",
+        "democrat_cot": "Take the role of a Democrat. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step.",
+        "republican_cot": "Take the role of a Republican. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step.",
+        "religious_cot": INSTRUCTIONS_PERSONA_RELIGIOUS_COT, 
+        "atheist_cot": INSTRUCTIONS_PERSONA_ATHEIST_COT, 
+        "high_school_cot": INSTRUCTIONS_PERSONA_HIGH_SCHOOL_COT,
+        "college_cot": INSTRUCTIONS_PERSONA_COLLEGE_COT,
+        "woman_cot": INSTRUCTIONS_PERSONA_WOMAN_COT_TEMPLATE,
+        "man_cot": INSTRUCTIONS_PERSONA_MAN_COT_TEMPLATE, 
 
-    
-    # Accuracy variants
-    "baseline_accuracy": "You are a person who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification.",
-    "democrat_accuracy": "Take the role of a Democrat who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification.",
-    "republican_accuracy": "Take the role of a Republican who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification.",
-    "religious_accuracy": INSTRUCTIONS_PERSONA_RELIGIOUS_ACCURACY,
-    "atheist_accuracy": INSTRUCTIONS_PERSONA_ATHEIST_ACCURACY,
-    "high_school_accuracy": INSTRUCTIONS_PERSONA_HIGH_SCHOOL_ACCURACY,
-    "college_accuracy": INSTRUCTIONS_PERSONA_COLLEGE_ACCURACY,
-    "woman_accuracy": INSTRUCTIONS_PERSONA_WOMAN_ACCURACY, 
-    "man_accuracy": INSTRUCTIONS_PERSONA_MAN_ACCURACY
+        
+        # Accuracy variants
+        "baseline_accuracy": "You are a person who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification.",
+        "democrat_accuracy": "Take the role of a Democrat who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification.",
+        "republican_accuracy": "Take the role of a Republican who has a skeptical attitude and strives for accuracy. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification.",
+        "religious_accuracy": INSTRUCTIONS_PERSONA_RELIGIOUS_ACCURACY,
+        "atheist_accuracy": INSTRUCTIONS_PERSONA_ATHEIST_ACCURACY,
+        "high_school_accuracy": INSTRUCTIONS_PERSONA_HIGH_SCHOOL_ACCURACY,
+        "college_accuracy": INSTRUCTIONS_PERSONA_COLLEGE_ACCURACY,
+        "woman_accuracy": INSTRUCTIONS_PERSONA_WOMAN_ACCURACY, 
+        "man_accuracy": INSTRUCTIONS_PERSONA_MAN_ACCURACY
     }
-
-
-
-
     
     evaluator_to_constructor = {
-    "ollama": lambda model_name, host: OllamaModel(model_name, host),
-    "openai": lambda model_name, _: OpenAIModel(model_name)
+        "ollama": lambda model_name, host: OllamaModel(model_name, host),
+        "openai": lambda model_name, _: OpenAIModel(model_name)
     }
 
     # Parse command line arguments

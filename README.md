@@ -39,7 +39,11 @@ OPENAI_KEY=sk-pasteYourKeyHere
 Then, run the experiment script with the following parameters:
 
 ```bash
-python run-ollama.py [variant] [model_name] openai
+# To run scientfic evidence experiments:
+python run_scientific_evidence.py [variant] [model_name] openai
+
+# To run veracity discernment experiments:
+python run_veracity_discernment.py [variant] [model_name] openai
 ```
 
 Where:
@@ -60,7 +64,11 @@ export no_proxy=127.0.0.1,localhost
 Then, run the experiment:
 
 ```bash
-python run-ollama.py baseline_cot llama2 ollama
+# To run scientfic evidence experiments:
+python run_scientific_evidence.py [variant] [model_name] ollama
+
+# To run veracity discernment experiments:
+python run_veracity_discernment.py [variant] [model_name] ollama
 ```
 
 Where:
@@ -69,6 +77,8 @@ Where:
 - `[model_name]` is the [Ollama model name](https://ollama.com/library?sort=newest), e.g.`llama3.1`, `llama2`, `mistral`, `wizardlm2`, etc.
 
 ### Prompt variants
+
+#### For veracity discernment experiments
 
 | Prompt variant         | Mitigation type  | Persona                        |
 | -----------------------|------------------|--------------------------------|
@@ -100,6 +110,46 @@ Where:
 | `woman_accuracy`       | Accuracy         | Woman                          |
 | `man_accuracy`         | Accuracy         | Man                            |
 
+#### For scientific evidence experiments
+
+| Prompt variant         | Mitigation type  | Persona                        | Prompt variation |
+| -----------------------|------------------|--------------------------------|------------------|
+| `religious`            | None             | Religious person               | 1                |
+| `atheist`              | None             | Atheist                        | 1                |
+| `high_school`          | None             | Highest education: high-school | 1                |
+| `college`              | None             | Highest education: college     | 1                |
+| `woman`                | None             | Woman                          | 1                |
+| `man`                  | None             | Man                            | 1                |
+| `religious2`           | None             | Religious person               | 2                |
+| `atheist2`             | None             | Atheist                        | 2                |
+| `high_school2`         | None             | Highest education: high-school | 2                |
+| `college2`             | None             | Highest education: college     | 2                |
+| `woman2`               | None             | Woman                          | 2                |
+| `man2`                 | None             | Man                            | 2                |
+| `religious3`           | None             | Religious person               | 3                |
+| `atheist3`             | None             | Atheist                        | 3                |
+| `high_school3`         | None             | Highest education: high-school | 3                |
+| `college3`             | None             | Highest education: college     | 3                |
+| `woman3`               | None             | Woman                          | 3                |
+| `man3`                 | None             | Man                            | 3                |
+| `baseline_cot`         | Chain-of-thought | None                           |                  |
+| `democrat_cot`         | Chain-of-thought | Democrat                       |                  |
+| `republican_cot`       | Chain-of-thought | Republican                     |                  |
+| `religious_cot`        | Chain-of-thought | Religious person               |                  |
+| `atheist_cot`          | Chain-of-thought | Atheist                        |                  |
+| `high_school_cot`      | Chain-of-thought | Highest education: high-school |                  |
+| `college_cot`          | Chain-of-thought | Highest education: college     |                  |
+| `woman_cot`            | Chain-of-thought | Woman                          |                  |
+| `man_cot`              | Chain-of-thought | Man                            |                  |
+| `baseline_accuracy`    | Accuracy         | None                           |                  |
+| `democrat_accuracy`    | Accuracy         | Democrat                       |                  |
+| `republican_accuracy`  | Accuracy         | Republican                     |                  |
+| `religious_accuracy`   | Accuracy         | Religious person               |                  |
+| `atheist_accuracy`     | Accuracy         | Atheist                        |                  |
+| `high_school_accuracy` | Accuracy         | Highest education: high-school |                  |
+| `college_accuracy`     | Accuracy         | Highest education: college     |                  |
+| `woman_accuracy`       | Accuracy         | Woman                          |                  |
+| `man_accuracy`         | Accuracy         | Man                            |                  |
 
 ## Experiment design 
 Instruction templates are defined at the bottom of run-ollama.py. For example: 

@@ -165,16 +165,19 @@ class OllamaModel:
 
 if __name__ == "__main__":
 
+    # No mitigation instructions 
+    INSTRUCTIONS_BASELINE = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification." 
+    # TODO finish defining these.
+
     # COT instructions 
     INSTRUCTIONS_BASELINE_COT = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
-    INSTRUCTIONS_PERSONA_COT_TEMPLATE = "Take the role of a {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
+    INSTRUCTIONS_PERSONA_COT_TEMPLATE = "Take the role of {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
     INSTRUCTIONS_PERSONA_EDUCATION_COT_TEMPLATE = "Take the role of a person whose highest level of education is {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
     INSTRUCTIONS_PERSONA_GENDER_COT_TEMPLATE = "You are a {}. Your responses should closely mirror the knowledge and abilities of this persona. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
 
-
     # political 
-    INSTRUCTIONS_PERSONA_DEMOCRAT_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("Democrat")
-    INSTRUCTIONS_PERSONA_REPUBLICAN_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("Republican")
+    INSTRUCTIONS_PERSONA_DEMOCRAT_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("a Democrat")
+    INSTRUCTIONS_PERSONA_REPUBLICAN_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("a Republican")
 
     # religious
     INSTRUCTIONS_PERSONA_RELIGIOUS_COT = INSTRUCTIONS_PERSONA_COT_TEMPLATE.format("a religious person")
@@ -213,6 +216,17 @@ if __name__ == "__main__":
 
 
     variant_to_instructions = {
+        # No mitigation
+        "baseline": INSTRUCTIONS_BASELINE,
+        "democrat": INSTRUCTIONS_DEMOCRAT,
+        "republican": INSTRUCTIONS_REPUBLICAN,
+        "religious": INSTRUCTIONS_RELIGIOUS,
+        "atheist": INSTRUCTIONS_ATHEIST,
+        "high": INSTRUCTIONS_HIGH,
+        "college": INSTRUCTIONS_COLLEGE,
+        "woman": INSTRUCTIONS_WOMAN,
+        "man": INSTRUCTIONS_MAN,
+
         # Chain of thought 
         "baseline_cot": INSTRUCTIONS_BASELINE_COT,
         "democrat_cot": INSTRUCTIONS_PERSONA_DEMOCRAT_COT,
