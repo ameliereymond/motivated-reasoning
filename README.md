@@ -173,10 +173,12 @@ INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE = "Take the role of a {} who has a skepti
 
 
 ## Repository structure 
-project-root/
-├── data/                        # to store output files
+
+``` project-root/
+├── data/                       
 ├── scripts/                     # contains script to launch Ollama 
 ├── .gitignore                  
 ├── README.md                    
 ├── run_scientific_evidence.py   # script for scientific evidence experiment
 └── run_veracity_discernment.py  # script for verity discernment experiment
+```
