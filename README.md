@@ -80,35 +80,51 @@ Where:
 
 #### For veracity discernment experiments
 
-| Prompt variant         | Mitigation type  | Persona                        |
-| -----------------------|------------------|--------------------------------|
-| `baseline`             | No mitigation    | None                           |
-| `democrat`             | No mitigation    | Democrat                       |
-| `republican`           | No mitigation    | Republican                     |
-| `religious`            | No mitigation    | Religious person               |
-| `atheist`              | No mitigation    | Atheist                        |
-| `high_school`          | No mitigation    | Highest education: high-school |
-| `college`              | No mitigation    | Highest education: college     |
-| `woman`                | No mitigation    | Woman                          |
-| `man`                  | No mitigation    | Man                            |
-| `baseline_cot`         | Chain-of-thought | None                           |
-| `democrat_cot`         | Chain-of-thought | Democrat                       |
-| `republican_cot`       | Chain-of-thought | Republican                     |
-| `religious_cot`        | Chain-of-thought | Religious person               |
-| `atheist_cot`          | Chain-of-thought | Atheist                        |
-| `high_school_cot`      | Chain-of-thought | Highest education: high-school |
-| `college_cot`          | Chain-of-thought | Highest education: college     |
-| `woman_cot`            | Chain-of-thought | Woman                          |
-| `man_cot`              | Chain-of-thought | Man                            |
-| `baseline_accuracy`    | Accuracy         | None                           |
-| `democrat_accuracy`    | Accuracy         | Democrat                       |
-| `republican_accuracy`  | Accuracy         | Republican                     |
-| `religious_accuracy`   | Accuracy         | Religious person               |
-| `atheist_accuracy`     | Accuracy         | Atheist                        |
-| `high_school_accuracy` | Accuracy         | Highest education: high-school |
-| `college_accuracy`     | Accuracy         | Highest education: college     |
-| `woman_accuracy`       | Accuracy         | Woman                          |
-| `man_accuracy`         | Accuracy         | Man                            |
+| Prompt variant           | Mitigation type  | Persona                        | Prompt variation |
+| ------------------------ |------------------|--------------------------------|------------------
+| `baseline`               | No mitigation    | None                           |                  |
+| `democrat`               | No mitigation    | Democrat                       | 1                |
+| `republican`             | No mitigation    | Republican                     | 1                |
+| `religious`              | No mitigation    | Religious person               | 1                |
+| `atheist`                | No mitigation    | Atheist                        | 1                |
+| `high_school`            | No mitigation    | Highest education: high-school | 1                |
+| `college`                | No mitigation    | Highest education: college     | 1                |
+| `woman`                  | No mitigation    | Woman                          | 1                |
+| `man`                    | No mitigation    | Man                            | 1                |
+| `democrat2`              | No mitigation    | Democrat                       | 2                |
+| `republican2`            | No mitigation    | Republican                     | 2                |
+| `religious2`             | No mitigation    | Religious person               | 2                |
+| `atheist2`               | No mitigation    | Atheist                        | 2                |
+| `high_school2`           | No mitigation    | Highest education: high-school | 2                |
+| `college2`               | No mitigation    | Highest education: college     | 2                |
+| `woman2`                 | No mitigation    | Woman                          | 2                |
+| `man2`                   | No mitigation    | Man                            | 2                |
+| `democrat3`              | No mitigation    | Democrat                       | 3                | 
+| `republican3`            | No mitigation    | Republican                     | 3                |
+| `religious3`             | No mitigation    | Religious person               | 3                |
+| `atheist3`               | No mitigation    | Atheist                        | 3                |
+| `high_school3`           | No mitigation    | Highest education: high-school | 3                |
+| `college3`               | No mitigation    | Highest education: college     | 3                |
+| `woman3`                 | No mitigation    | Woman                          | 3                | 
+| `man3`                   | No mitigation    | Man                            | 3                |
+| `baseline_cot`           | Chain-of-thought | None                           |
+| `democrat_cot`           | Chain-of-thought | Democrat                       |
+| `republican_cot`         | Chain-of-thought | Republican                     |
+| `religious_cot`          | Chain-of-thought | Religious person               |
+| `atheist_cot`            | Chain-of-thought | Atheist                        |
+| `high_school_cot`        | Chain-of-thought | Highest education: high-school |
+| `college_cot`            | Chain-of-thought | Highest education: college     |
+| `woman_cot`              | Chain-of-thought | Woman                          |
+| `man_cot`                | Chain-of-thought | Man                            |
+| `baseline_accuracy`      | Accuracy         | None                           |
+| `democrat_accuracy`      | Accuracy         | Democrat                       |
+| `republican_accuracy`    | Accuracy         | Republican                     |
+| `religious_accuracy`     | Accuracy         | Religious person               |
+| `atheist_accuracy`       | Accuracy         | Atheist                        |
+| `high_school_accuracy`   | Accuracy         | Highest education: high-school |
+| `college_accuracy`       | Accuracy         | Highest education: college     |
+| `woman_accuracy`         | Accuracy         | Woman                          |
+| `man_accuracy`           | Accuracy         | Man                            |
 
 #### For scientific evidence experiments
 
