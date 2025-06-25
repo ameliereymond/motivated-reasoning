@@ -57,7 +57,7 @@ First, start Ollama in the background:
 
 
 ```bash
-./start-ollama.sh 
+./scripts/start-ollama.sh 
 export no_proxy=127.0.0.1,localhost
 ```
 
