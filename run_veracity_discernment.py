@@ -8,6 +8,8 @@ import openai
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# Prompt construction
+
 real_or_fake = [
     "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake", "Fake",
     "Real", "Real", "Real", "Real", "Real", "Real", "Real", "Real", "Real", "Real"
@@ -59,6 +61,9 @@ def prepare_pa_message(headline, instructions):
     ]
     return message_pa
 
+
+# TO BUILD PROMPT
+
 def prepare_conf_message(message_pa, system_message):
     message_conf = [
         {
@@ -72,6 +77,8 @@ def prepare_conf_message(message_pa, system_message):
 
     ]
     return message_pa + message_conf
+
+# TO RUN EXPERIMENT
 
 def run_simulation(model, instructions, mist, n_sim, already_computed = None):
     model.pull()
@@ -165,9 +172,64 @@ class OllamaModel:
 
 if __name__ == "__main__":
 
-    # No mitigation instructions 
+    # No mitigation prompt instructions 
+    # Here, we test 3 different variations of the instructions for robustness 
+
+
     INSTRUCTIONS_BASELINE = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification." 
-    # TODO finish defining these.
+    INSTRUCTIONS_PERSONA_TEMPLATE = "Take the role of {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_TEMPLATE2 = "You are {}. Your responses should closely mirror the knowledge and abilities of this persona. You will be given a news headline. Please answer the following question."
+    INSTRUCTIONS_PERSONA_TEMPLATE3 = "Adopt the identity of {}. Answer the questions while staying in strict accordance with the nature of this identity. You will be given a news headline Please answer the following question. ONLY return one answer."
+    
+    INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE = "Take the role of person whose highest level of education is {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE2 = "You are a person whose highest level of education is {}. Your responses should closely mirror the knowledge and abilities of this persona. Please answer the following question."
+    INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE3 = "Adopt the identity of a person whose highest level of education is {}. Answer the questions while staying in strict accordance with the nature of this identity. Please answer the following question. ONLY return one answer."
+    
+    INSTRUCTIONS_PERSONA_GENDER_TEMPLATE = "You are {}. Your responses should closely mirror the knowledge and abilities of this persona. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_GENDER_TEMPLATE2 = "Take the role of {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this persona.  Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
+    INSTRUCTIONS_PERSONA_GENDER_TEMPLATE3 = "Adopt the identity of {}. Answer the questions while staying in strict accordance with the nature of this identity. Please answer the following question. ONLY return one answer."
+   
+   # political 
+    INSTRUCTIONS_PERSONA_DEMOCRAT = INSTRUCTIONS_PERSONA_TEMPLATE.format("a Democrat")
+    INSTRUCTIONS_PERSONA_DEMOCRAT2 = INSTRUCTIONS_PERSONA_TEMPLATE2.format("a Democrat")
+    INSTRUCTIONS_PERSONA_DEMOCRAT3 = INSTRUCTIONS_PERSONA_TEMPLATE3.format("a Democrat")
+
+    INSTRUCTIONS_PERSONA_REPUBLICAN = INSTRUCTIONS_PERSONA_TEMPLATE.format("a Republican")
+    INSTRUCTIONS_PERSONA_REPUBLICAN2 = INSTRUCTIONS_PERSONA_TEMPLATE2.format("a Republican")
+    INSTRUCTIONS_PERSONA_REPUBLICAN3 = INSTRUCTIONS_PERSONA_TEMPLATE3.format("a Republican")
+
+    # religion 
+    INSTRUCTIONS_PERSONA_RELIGIOUS = INSTRUCTIONS_PERSONA_TEMPLATE.format("a religious person")
+    INSTRUCTIONS_PERSONA_RELIGIOUS2 = INSTRUCTIONS_PERSONA_TEMPLATE2.format("a religious person")
+    INSTRUCTIONS_PERSONA_RELIGIOUS3 = INSTRUCTIONS_PERSONA_TEMPLATE3.format("a religious person")
+
+    INSTRUCTIONS_PERSONA_ATHEIST = INSTRUCTIONS_PERSONA_TEMPLATE.format("an atheist")
+    INSTRUCTIONS_PERSONA_ATHEIST2 = INSTRUCTIONS_PERSONA_TEMPLATE2.format("an atheist")
+    INSTRUCTIONS_PERSONA_ATHEIST3 = INSTRUCTIONS_PERSONA_TEMPLATE3.format("an atheist")
+
+    # education
+    INSTRUCTIONS_PERSONA_HIGH_SCHOOL= INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE.format("high school diploma or GED")
+    INSTRUCTIONS_PERSONA_HIGH_SCHOOL2= INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE2.format("high school diploma or GED")
+    INSTRUCTIONS_PERSONA_HIGH_SCHOOL3= INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE3.format("high school diploma or GED")
+    
+    INSTRUCTIONS_PERSONA_COLLEGE = INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE.format("Bachelor's or above")
+    INSTRUCTIONS_PERSONA_COLLEGE2 = INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE2.format("Bachelor's or above")
+    INSTRUCTIONS_PERSONA_COLLEGE3 = INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE2.format("Bachelor's or above")
+
+    # gender
+    INSTRUCTIONS_PERSONA_WOMAN = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE.format("man")
+    INSTRUCTIONS_PERSONA_WOMAN2 = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE2.format("man")
+    INSTRUCTIONS_PERSONA_WOMAN3 = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE3.format("man")
+
+    INSTRUCTIONS_PERSONA_MAN = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE.format("woman")
+    INSTRUCTIONS_PERSONA_MAN2 = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE2.format("woman")
+    INSTRUCTIONS_PERSONA_MAN3 = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE3.format("woman")
+
+
+    ###########################################################################################################################################
+
+    # MITIGATIONS TECHNIQUES: COT ("think step by step") and accuracy 
+
 
     # COT instructions 
     INSTRUCTIONS_BASELINE_COT = "You will be given a news headline. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification. Think step by step."
@@ -218,14 +280,38 @@ if __name__ == "__main__":
     variant_to_instructions = {
         # No mitigation
         "baseline": INSTRUCTIONS_BASELINE,
-        "democrat": INSTRUCTIONS_DEMOCRAT,
-        "republican": INSTRUCTIONS_REPUBLICAN,
-        "religious": INSTRUCTIONS_RELIGIOUS,
-        "atheist": INSTRUCTIONS_ATHEIST,
-        "high": INSTRUCTIONS_HIGH,
-        "college": INSTRUCTIONS_COLLEGE,
-        "woman": INSTRUCTIONS_WOMAN,
-        "man": INSTRUCTIONS_MAN,
+
+        "democrat": INSTRUCTIONS_PERSONA_DEMOCRAT,
+        "democrat2": INSTRUCTIONS_PERSONA_DEMOCRAT2,
+        "democrat3": INSTRUCTIONS_PERSONA_DEMOCRAT3,
+
+        "republican": INSTRUCTIONS_PERSONA_REPUBLICAN,
+        "republican2": INSTRUCTIONS_PERSONA_REPUBLICAN2,
+        "republican3": INSTRUCTIONS_PERSONA_REPUBLICAN3,
+
+        "religious": INSTRUCTIONS_PERSONA_RELIGIOUS,
+        "religious2": INSTRUCTIONS_PERSONA_RELIGIOUS,
+        "religious3": INSTRUCTIONS_PERSONA_RELIGIOUS,
+
+        "atheist": INSTRUCTIONS_PERSONA_ATHEIST,
+        "atheist2": INSTRUCTIONS_PERSONA_ATHEIST2,
+        "atheist3": INSTRUCTIONS_PERSONA_ATHEIST3,
+    
+        "high_school": INSTRUCTIONS_PERSONA_HIGH_SCHOOL,
+        "high_school2": INSTRUCTIONS_PERSONA_HIGH_SCHOOL2,
+        "high_school3": INSTRUCTIONS_PERSONA_HIGH_SCHOOL3,
+
+        "college": INSTRUCTIONS_PERSONA_COLLEGE,
+        "college2": INSTRUCTIONS_PERSONA_COLLEGE2,
+        "college3": INSTRUCTIONS_PERSONA_COLLEGE3,
+
+        "woman": INSTRUCTIONS_PERSONA_WOMAN,
+        "woman2": INSTRUCTIONS_PERSONA_WOMAN2,
+        "woman3": INSTRUCTIONS_PERSONA_WOMAN3,
+
+        "man": INSTRUCTIONS_PERSONA_MAN,
+        "man2": INSTRUCTIONS_PERSONA_MAN2,
+        "man3": INSTRUCTIONS_PERSONA_MAN3,
 
         # Chain of thought 
         "baseline_cot": INSTRUCTIONS_BASELINE_COT,

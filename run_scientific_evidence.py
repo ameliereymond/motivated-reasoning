@@ -7,6 +7,8 @@ import sys
 from openai import OpenAI
 from dotenv import load_dotenv
 
+# Prompt construction
+
 rash_increase_table = {
     "result": [
         {
@@ -138,6 +140,9 @@ class OllamaModel(ModelBase):
     
     def query(self, messages):
         return self.client.chat(model=self.model_name, messages=messages).message.content
+    
+
+# TO BUILD PROMPT
 
 def prepare_message(instructions, query):
     """Prepare the message for the model"""
@@ -151,6 +156,8 @@ def prepare_message(instructions, query):
             'content': query,
         },
     ]
+
+# TO RUN EXPERIMENT
 
 def run_simulation(model, instructions, n_sim=100):
     """Run the simulation with the given model and prompts"""
@@ -192,11 +199,11 @@ def save_results(results_df, filename):
 
 if __name__ == "__main__":
 
-    # Baseline variants 
+    # Baseline variants (no persona)
 
     INSTRUCTIONS_PERSONA_TEMPLATE = "Take the role of {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role.  Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
-    INSTRUCTIONS_PERSONA_TEMPLATE2 = "You are a {}. Your responses should closely mirror the knowledge and abilities of this persona. Please answer the following question."
-    INSTRUCTIONS_PERSONA_TEMPLATE3 = "Adopt the identity of a {}. Answer the questions while staying in strict accordance with the nature of this identity. Please answer the following question. ONLY return one answer."
+    INSTRUCTIONS_PERSONA_TEMPLATE2 = "You are {}. Your responses should closely mirror the knowledge and abilities of this persona. Please answer the following question."
+    INSTRUCTIONS_PERSONA_TEMPLATE3 = "Adopt the identity of {}. Answer the questions while staying in strict accordance with the nature of this identity. Please answer the following question. ONLY return one answer."
     
     INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE = "Take the role of a person whose highest level of education is {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this role. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
     INSTRUCTIONS_PERSONA_EDUCATION_TEMPLATE2 = "You are a person whose highest level of education is {}. Your responses should closely mirror the knowledge and abilities of this persona. Please answer the following question."
@@ -204,9 +211,16 @@ if __name__ == "__main__":
     
     INSTRUCTIONS_PERSONA_GENDER_TEMPLATE = "You are a {}. Your responses should closely mirror the knowledge and abilities of this persona. Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
     INSTRUCTIONS_PERSONA_GENDER_TEMPLATE2 = "Take the role of {}. It is critical that you answer the questions while staying true to the characteristics and attributes of this persona.  Please answer the following questions about it. ONLY return the answer, and do NOT give any justification."
-    INSTRUCTIONS_PERSONA_GENDER_TEMPLATE3 = "Adopt the identity of a {}. Answer the questions while staying in strict accordance with the nature of this identity. Please answer the following question. ONLY return one answer."
+    INSTRUCTIONS_PERSONA_GENDER_TEMPLATE3 = "Adopt the identity of {}. Answer the questions while staying in strict accordance with the nature of this identity. Please answer the following question. ONLY return one answer."
     
+    # political
+    INSTRUCTIONS_PERSONA_DEMOCRAT = INSTRUCTIONS_PERSONA_TEMPLATE.format("a Democrat")
+    INSTRUCTIONS_PERSONA_DEMOCRAT2 = INSTRUCTIONS_PERSONA_TEMPLATE2.format("a Democrat")
+    INSTRUCTIONS_PERSONA_DEMOCRAT3 = INSTRUCTIONS_PERSONA_TEMPLATE3.format("a Democrat")
 
+    INSTRUCTIONS_PERSONA_REPUBLICAN = INSTRUCTIONS_PERSONA_TEMPLATE.format("a Republican")
+    INSTRUCTIONS_PERSONA_REPUBLICAN2 = INSTRUCTIONS_PERSONA_TEMPLATE2.format("a Republican")
+    INSTRUCTIONS_PERSONA_REPUBLICAN3 = INSTRUCTIONS_PERSONA_TEMPLATE3.format("a Republican")
 
 
     # religious
@@ -236,7 +250,10 @@ if __name__ == "__main__":
     INSTRUCTIONS_PERSONA_MAN2 = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE2.format("woman")
     INSTRUCTIONS_PERSONA_MAN3 = INSTRUCTIONS_PERSONA_GENDER_TEMPLATE3.format("woman")
 
-    ##################### Mitigation techniques 
+
+    ##################################################################################################################################################################
+
+    # MITIGATIONS TECHNIQUES: COT ("think step by step") and accuracy 
 
     # COT templates for personas other than political personas 
 
@@ -299,7 +316,6 @@ if __name__ == "__main__":
         "college3": INSTRUCTIONS_PERSONA_COLLEGE3,
         "woman3": INSTRUCTIONS_PERSONA_WOMAN3,
         "man3": INSTRUCTIONS_PERSONA_MAN3,
-
 
         
         # COT variants
