@@ -1,18 +1,24 @@
 # Persona-Assigned LLMs Exhibit Human-Like Motivated Reasoning 
 
-This repository contains the code, data, and evaluation scripts for our XXX 2025 paper: 
-
-** Persona-Assigned LLMs Exhibit Human-Like Motivated Reasoning ** 
+This repository contains the code, data, and evaluation scripts for our paper: **Persona-Assigned LLMs Exhibit Human-Like Motivated Reasoning** 
 
 Bibtex:
 
 ```
-todo
+@misc{dash2025personaassignedlargelanguagemodels,
+      title={Persona-Assigned Large Language Models Exhibit Human-Like Motivated Reasoning}, 
+      author={Saloni Dash and Amélie Reymond and Emma S. Spiro and Aylin Caliskan},
+      year={2025},
+      eprint={2506.20020},
+      archivePrefix={arXiv},
+      primaryClass={cs.AI},
+      url={https://arxiv.org/abs/2506.20020}, 
+}
 ```
 
 Please reach out to attr[AT]uw.edu and sadash [AT]uw.edu  with any questions. 
 
-## Running the code
+## Running the Code
 
 ### Prerequisites
 
@@ -169,7 +175,7 @@ Where:
 
 ## Experiment design 
 Instruction templates are defined at the bottom of run-ollama.py. For example: 
-INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE = "Take the role of a {} who has a skeptical attitude and strives for accuracy..."
+INSTRUCTIONS_PERSONA_ACCURACY_TEMPLATE = "*Take the role of a {} who has a skeptical attitude and strives for accuracy...*"
 
 
 ## Repository structure 
