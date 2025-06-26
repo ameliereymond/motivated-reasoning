@@ -2,7 +2,7 @@
 
 This repository contains the code, data, and evaluation scripts for our paper: **Persona-Assigned LLMs Exhibit Human-Like Motivated Reasoning** 
 
-Bibtex:
+To cite our paper:
 
 ```
 @misc{dash2025personaassignedlargelanguagemodels,
